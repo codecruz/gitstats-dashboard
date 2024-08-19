@@ -1,37 +1,17 @@
-document.addEventListener("DOMContentLoaded", function () {
-    fetch('/api/stats')
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-        })
-        .then(data => {
-            const statsDiv = document.getElementById('stats');
-            statsDiv.innerHTML = ''; // Limpiar contenido previo
-
-            data.forEach(repoData => {
-                const repoElement = document.createElement('div');
-                repoElement.classList.add('bg-white', 'p-4', 'rounded', 'shadow', 'transition', 'transform', 'hover:scale-105');
-
-                repoElement.innerHTML = `
-                <h2 class="text-xl font-bold mb-2">${repoData.repo}</h2>
-                <div class="mb-4">
-                    <h3 class="text-lg font-semibold">Clones</h3>
-                    <p class="text-gray-700">Total: <span class="font-semibold">${repoData.clones}</span></p>
-                    <p class="text-gray-700">Unique: <span class="font-semibold">${repoData.unique_clones}</span></p>
-                </div>
-                <div>
-                    <h3 class="text-lg font-semibold">Visits</h3>
-                    <p class="text-gray-700">Total: <span class="font-semibold">${repoData.views}</span></p>
-                    <p class="text-gray-700">Unique: <span class="font-semibold">${repoData.unique_views}</span></p>
-                </div>
-            `;
-                statsDiv.appendChild(repoElement);
-            });
-        })
-        .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
-        });
+document.addEventListener('DOMContentLoaded', async () => {
+    const response = await fetch('/api/stats');
+    const repos = await response.json();
+    
+    const container = document.getElementById('repo-container');
+    container.innerHTML = repos.map(repo => `
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <h2 class="text-xl font-semibold text-gray-800">${repo.repo}</h2>
+            <a href="https://github.com/${repo.repo}" class="text-blue-500 hover:underline" target="_blank">View on GitHub</a>
+            <p class="mt-4"><strong class="text-gray-600">Clones:</strong> ${repo.clones}</p>
+            <p class="mt-2"><strong class="text-gray-600">Unique Clones:</strong> ${repo.unique_clones}</p>
+            <p class="mt-2"><strong class="text-gray-600">Views:</strong> ${repo.views}</p>
+            <p class="mt-2"><strong class="text-gray-600">Unique Views:</strong> ${repo.unique_views}</p>
+            <p class="mt-2"><strong class="text-gray-600">Last Updated:</strong> ${new Date(repo.last_updated).toLocaleDateString()}</p>
+        </div>
+    `).join('');
 });

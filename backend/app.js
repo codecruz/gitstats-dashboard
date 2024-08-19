@@ -44,7 +44,7 @@ async function fetchAllRepos(username, token) {
     return repos;
 }
 
-// Ruta para obtener las visitas y clones de todos los repositorios de un usuario u organización
+// Ruta para obtener las visitas, clones y última actualización de todos los repositorios de un usuario u organización
 app.get('/api/stats', async (req, res) => {
     const token = process.env.GITHUB_TOKEN;
     const username = process.env.GITHUB_USERNAME;
@@ -64,11 +64,10 @@ app.get('/api/stats', async (req, res) => {
                 }
             });
 
-            if (!cloneResponse.ok) {
-                throw new Error('Network response was not ok ' + cloneResponse.statusText);
+            let cloneData = { count: 'Data not available', uniques: 'Data not available' };
+            if (cloneResponse.ok) {
+                cloneData = await cloneResponse.json();
             }
-
-            const cloneData = await cloneResponse.json();
 
             // Obtener visitas
             const viewUrl = `https://api.github.com/repos/${username}/${repo.name}/traffic/views`;
@@ -80,18 +79,18 @@ app.get('/api/stats', async (req, res) => {
                 }
             });
 
-            if (!viewResponse.ok) {
-                throw new Error('Network response was not ok ' + viewResponse.statusText);
+            let viewData = { count: 'Data not available', uniques: 'Data not available' };
+            if (viewResponse.ok) {
+                viewData = await viewResponse.json();
             }
-
-            const viewData = await viewResponse.json();
 
             statsData.push({
                 repo: repo.name,
                 clones: cloneData.count,
                 unique_clones: cloneData.uniques,
                 views: viewData.count,
-                unique_views: viewData.uniques
+                unique_views: viewData.uniques,
+                last_updated: repo.updated_at
             });
         }
 
