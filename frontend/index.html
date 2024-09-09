@@ -1,16 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GitHub Repository Stats Viewer</title>
     <link href="dist/tailwind.css" rel="stylesheet">
     <script defer src="app.js"></script>
+    <style>
+        .hidden {
+            display: none;
+        }
+
+        .spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+    </style>
 </head>
+
 <body class="bg-gray-100 p-8">
-    <h1 class="text-3xl font-bold mb-6">GitHub Repository Stats</h1>
+
+    <div id="spinner" class="loader spinner hidden flex justify-center mx-auto pt-1/2"></div>
+    <h1 id="header" class="hidden text-3xl font-bold mb-6">GitHub Repository Stats</h1>
     <div id="repo-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+
         <!-- Repository cards will be inserted here -->
     </div>
 </body>
+
 </html>
