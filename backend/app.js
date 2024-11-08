@@ -2,12 +2,16 @@ const express = require('express');
 const fetch = require('node-fetch');
 const dotenv = require('dotenv');
 
-dotenv.config(); // Cargar variables de entorno desde el archivo .env
+dotenv.config(); 
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Permitir acceso a archivos estáticos en la carpeta frontend
+app.get('/api/username', (req, res) => {
+    const username = process.env.GITHUB_USERNAME;
+    res.json({ username });
+});
+
 app.use(express.static('../frontend'));
 
 async function fetchAllRepos(username, token) {
@@ -32,7 +36,6 @@ async function fetchAllRepos(username, token) {
         const data = await response.json();
         repos = repos.concat(data);
 
-        // Check if there's a next page
         const linkHeader = response.headers.get('link');
         if (linkHeader && linkHeader.includes('rel="next"')) {
             page++;
@@ -44,7 +47,6 @@ async function fetchAllRepos(username, token) {
     return repos;
 }
 
-// Ruta para obtener las visitas, clones y última actualización de todos los repositorios de un usuario u organización
 app.get('/api/stats', async (req, res) => {
     const token = process.env.GITHUB_TOKEN;
     const username = process.env.GITHUB_USERNAME;
@@ -54,7 +56,6 @@ app.get('/api/stats', async (req, res) => {
         const statsData = [];
 
         for (const repo of repos) {
-            // Obtener clones
             const cloneUrl = `https://api.github.com/repos/${username}/${repo.name}/traffic/clones`;
             const cloneResponse = await fetch(cloneUrl, {
                 method: 'GET',
@@ -69,7 +70,6 @@ app.get('/api/stats', async (req, res) => {
                 cloneData = await cloneResponse.json();
             }
 
-            // Obtener visitas
             const viewUrl = `https://api.github.com/repos/${username}/${repo.name}/traffic/views`;
             const viewResponse = await fetch(viewUrl, {
                 method: 'GET',
@@ -101,5 +101,4 @@ app.get('/api/stats', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
 });

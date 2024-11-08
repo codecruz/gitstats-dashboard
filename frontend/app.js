@@ -12,8 +12,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         const { username } = await usernameResponse.json();
 
-        const response = await fetch(`/api/stats?username=${username}`);
+        const response = await fetch('/api/stats');
         if (!response.ok) {
+            console.error('Error fetching stats:', error); // Muestra el error en la consola
+        res.status(500).json({ error: error.toString() });
             throw new Error('Error en la respuesta de la API');
         }
         const repos = await response.json();
