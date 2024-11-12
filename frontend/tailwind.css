@@ -37,3 +37,7 @@
         background-position: left
     }
 }
+
+.canvas-container {
+    height: 200px; /* Ajusta la altura según lo que necesites */
+}
