@@ -15,12 +15,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         const response = await fetch('/api/stats');
         if (!response.ok) {
             console.error('Error fetching stats:', error); // Muestra el error en la consola
-        res.status(500).json({ error: error.toString() });
+            res.status(500).json({ error: error.toString() });
             throw new Error('Error en la respuesta de la API');
         }
         const repos = await response.json();
 
-        // Oculta el spinner
         header.classList.remove('hidden');
         spinner.classList.add('hidden');
         spinner.classList.remove('spinner');
