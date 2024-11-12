@@ -1,15 +1,13 @@
-// backend/app.js
 const express = require('express');
 const fetch = require('node-fetch');
 const dotenv = require('dotenv');
-const initializeDatabase = require('./models/db'); // Importa la función de inicialización
+const initializeDatabase = require('./models/db');
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Inicializa la base de datos y sincroniza las tablas
 initializeDatabase().then(({ sequelize }) => {
     sequelize.sync({ alter: true })
         .then(() => {
@@ -19,16 +17,13 @@ initializeDatabase().then(({ sequelize }) => {
             console.error('Error creating database:', err);
         });
 
-    // Ruta para obtener el nombre de usuario de GitHub
     app.get('/api/username', (req, res) => {
         const username = process.env.GITHUB_USERNAME;
         res.json({ username });
     });
 
-    // Sirve los archivos estáticos desde el frontend
     app.use(express.static('../frontend'));
 
-    // Función para obtener todos los repositorios
     async function fetchAllRepos(username, token) {
         let repos = [];
         let page = 1;
@@ -62,7 +57,6 @@ initializeDatabase().then(({ sequelize }) => {
         return repos;
     }
 
-    // Ruta para obtener las estadísticas de los repositorios
     app.get('/api/stats', async (req, res) => {
         const token = process.env.GITHUB_TOKEN;
         const username = process.env.GITHUB_USERNAME;
@@ -102,8 +96,8 @@ initializeDatabase().then(({ sequelize }) => {
 
                 statsData.push({
                     repo: repo.name,
-                    clones: cloneData.count,
-                    unique_clones: cloneData.uniques,
+                    clones: repo.clones,
+                    unique_clones: repo.unique_clones,
                     views: viewData.count,
                     unique_views: viewData.uniques,
                     last_updated: repo.updated_at
@@ -116,7 +110,6 @@ initializeDatabase().then(({ sequelize }) => {
         }
     });
 
-    // Inicia el servidor después de que se complete la inicialización
     app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);
     });
