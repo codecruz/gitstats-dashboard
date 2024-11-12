@@ -3,8 +3,8 @@
 #### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/your-repo.git
-cd your-repo
+git clone https://github.com/codecruz/gitstats-dashboard.git
+cd gitstats-dashboard
 ```
 
 
@@ -27,7 +27,11 @@ cd your-repo
 
     ```env
     GITHUB_TOKEN=your_personal_access_token
-    GITHUB_USERNAME=username_or_org_name
+    GITHUB_USERNAME=your_github_username_or_organization
+    DB_NAME=your_database_name
+    DB_USER=your_database_user
+    DB_PASSWORD=your_database_password
+    DB_HOST=your_database_host
     ```
 
 4. Install the backend dependencies:
@@ -62,7 +66,21 @@ cd your-repo
     npm run build:css
     ```
 
-4. You may serve the static files using a local server or simply open the `index.html` file in your browser.
+#### 4. Update GitHub Stats
+
+The `updateStats.js` script is responsible for populating the database with repository statistics (views, unique views, clones, unique clones) from the GitHub API. It will also add new repositories to the database if they are not already present.
+
+1. Run the `updateStats.js` script to populate the database with GitHub repository statistics:
+
+    ```bash
+    node backend/updateStats.js
+    ```
+
+2. This will fetch data from the GitHub API and store it in the database, creating daily statistics for each repository.
+
+> **Note**: You should run this script periodically to keep your repository statistics up to date. You can automate this process with a cron job or run it manually as needed.
+
+5. You may serve the static files using a local server or simply open the `index.html` file in your browser.
 
 ## Usage
 
