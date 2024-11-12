@@ -53,6 +53,34 @@ app.get('/api/db-stats', (req, res) => {
     });
 });
 
+// Ruta para obtener los registros más recientes de un repositorio específico
+app.get('/api/db-stats/:repositoryId', (req, res) => {
+    const { repositoryId } = req.params; // Obtener el repositoryId de la URL
+
+    const query = `
+        SELECT * FROM dailystats
+        WHERE repositoryId = ? 
+        AND (repositoryId, date) IN (
+            SELECT repositoryId, MAX(date) FROM dailystats WHERE repositoryId = ? GROUP BY repositoryId
+        )
+    `;
+
+    // Ejecutar la consulta SQL para obtener los registros más recientes de ese repositorio
+    db.query(query, [repositoryId, repositoryId], (err, results) => {
+        if (err) {
+            console.error('Error al consultar los registros de la base de datos:', err);
+            return res.status(500).json({ error: 'Error en la base de datos' });
+        }
+
+        // Verificar si hay resultados
+        if (results.length === 0) {
+            return res.status(404).json({ error: 'No records found for the given repositoryId' });
+        }
+
+        // Retornar los resultados como JSON
+        res.json(results);
+    });
+});
 // Iniciar el servidor
 app.listen(port, () => {
     console.log(`Servidor en ejecución en http://localhost:${port}`);
