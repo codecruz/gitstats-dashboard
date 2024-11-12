@@ -41,3 +41,8 @@
 .canvas-container {
     height: 200px; /* Ajusta la altura según lo que necesites */
 }
+
+.increment {
+    color: green;
+    font-weight: bold;
+}

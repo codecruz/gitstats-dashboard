@@ -55,34 +55,35 @@ document.addEventListener('DOMContentLoaded', async () => {
             let viewsChange = 'No Change';
             let uniqueClones = "No Change";
             let uniqueViews = "No Change";
-
+            console.log("Custom");
+            console.log(dbRepo);
             if (dbRepo) {
                 if (repo.clones > dbRepo.clones) {
                     diff = repo.clones - dbRepo.clones;
-                    clonesChange = '+' + diff;
+                    clonesChange = '<span class="increment">+' + diff + '</span>';
                 } else if (repo.clones < dbRepo.clones) {
                     diff = dbRepo.clones - repo.clones;
                     clonesChange = '-' + diff;
                 }
                 if (repo.views > dbRepo.views) {
                     diff = repo.views - dbRepo.views;
-                    viewsChange = '+' + diff;
+                    viewsChange = '<span class="increment">+' + diff + '</span>';
                 } else if (repo.views < dbRepo.views) {
                     diff = dbRepo.views - repo.views;
                     viewsChange = '-' + diff;
                 }
-                if (repo.unique_clones > dbRepo.unique_clones) {
-                    diff = repo.unique_clones - dbRepo.unique_clones;
-                    uniqueClones = '+' + diff;
-                } else if (repo.unique_clones < dbRepo.unique_clones) {
-                    diff = dbRepo.unique_clones - repo.unique_clones;
+                if (repo.unique_clones > dbRepo.uniqueClones) {
+                    diff = repo.unique_clones - dbRepo.uniqueClones;
+                    uniqueClones = '<span class="increment">+' + diff + '</span>';
+                } else if (repo.unique_clones < dbRepo.uniqueClones) {
+                    diff = dbRepo.uniqueClones - repo.unique_clones;
                     uniqueClones = '-' + diff;
                 }
                 if (repo.unique_views > dbRepo.unique_views) {
-                    diff = repo.unique_views - dbRepo.unique_views;
-                    uniqueViews = '+' + diff;
-                } else if (repo.unique_views < dbRepo.unique_views) {
-                    diff = dbRepo.unique_views - repo.unique_views;
+                    diff = repo.unique_views - dbRepo.uniqueViews;
+                    uniqueViews = '<span class="increment">+' + diff + '</span>';
+                } else if (repo.unique_views < dbRepo.uniqueViews) {
+                    diff = dbRepo.uniqueViews - repo.unique_views;
                     uniqueViews = '-' + diff;
                 }
             }
