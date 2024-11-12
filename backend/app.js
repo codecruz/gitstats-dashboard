@@ -9,7 +9,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors({
-    origin: 'http://localhost:3001',  // Cambia si tu frontend está en otro puerto o dominio
+    origin: 'http://localhost:3001',  
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type'],
 }));
