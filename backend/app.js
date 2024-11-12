@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const fetch = require('node-fetch');
 const dotenv = require('dotenv');
 
@@ -6,6 +7,13 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+app.use(cors({
+    origin: 'http://localhost:3001',  
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type'],
+}));
+
 
 app.get('/api/username', (req, res) => {
     const username = process.env.GITHUB_USERNAME;
