@@ -80,7 +80,6 @@ The `updateStats.js` script is responsible for populating the database with repo
 
 > **Note**: You should run this script periodically to keep your repository statistics up to date. You can automate this process with a cron job or run it manually as needed.
 
-5. You may serve the static files using a local server or simply open the `index.html` file in your browser.
 
 ## Usage
 
@@ -95,8 +94,15 @@ If you would like to contribute to this project, please fork the repository and 
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-## Acknowledgments
+## Technologies
 
-- [GitHub API](https://docs.github.com/en/rest) for providing repository statistics.
-- [Tailwind CSS](https://tailwindcss.com/) for the utility-first CSS framework.
-- [Node.js](https://nodejs.org/) for server-side JavaScript.
+This project uses the following technologies:
+
+- **Node.js**: JavaScript runtime for the backend server.
+- **Express**: Web framework for Node.js to handle routing and HTTP requests.
+- **Sequelize**: ORM for interacting with the MySQL database, used for defining models and querying data.
+- **Axios**: Library for making HTTP requests to the GitHub API.
+- **Tailwind CSS**: Utility-first CSS framework for styling the frontend.
+- **GitHub API**: To fetch repository statistics such as views, clones, and unique views.
+
+These technologies combine to create a full-stack application that gathers GitHub repository statistics and displays them on a dashboard. 
