@@ -60,9 +60,6 @@ app.get('/api/db-stats/:repositoryId', (req, res) => {
     const query = `
         SELECT * FROM dailystats
         WHERE repositoryId = ? 
-        AND (repositoryId, date) IN (
-            SELECT repositoryId, MAX(date) FROM dailystats WHERE repositoryId = ? GROUP BY repositoryId
-        )
     `;
 
     // Ejecutar la consulta SQL para obtener los registros más recientes de ese repositorio

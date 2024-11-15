@@ -18,8 +18,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         const githubRepos = await githubResponse.json();
 
-        console.log("Github Repos");
-        console.log(githubRepos);
 
         const dbStatsResponse = await fetch('http://localhost:3001/api/db-stats');
         if (!dbStatsResponse.ok) {
@@ -55,8 +53,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             let viewsChange = 'No Change';
             let uniqueClones = "No Change";
             let uniqueViews = "No Change";
-            console.log("Custom");
-            console.log(dbRepo);
+
             if (dbRepo) {
                 if (repo.clones > dbRepo.clones) {
                     diff = repo.clones - dbRepo.clones;
@@ -102,14 +99,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                     </div>
                 </div>
             `;
-        }).join('');  // Genera el HTML para todos los repositorios
+        }).join('');
 
-        // Crear el gráfico para cada tarjeta después de que se cargue todo el contenido
         githubRepos.forEach(async (repo) => {
             const ctx = document.getElementById(`chart-${repo.repo}`).getContext('2d');
             const dbRepo = latestRepositoryStatsMap[repoNameToIdMap[repo.repo]];
 
-            // Llamar a la función fetchRepositoryStats para obtener los datos para este repositorio
             const data = await fetchRepositoryStats(dbRepo.repositoryId);
 
             if (data.length === 0) {
@@ -117,8 +112,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 return;
             }
 
-            // Obtener los datos para el gráfico (ya en el formato correcto)
-            const labels = data.map(item => new Date(item.date).toLocaleDateString()); // Fechas
+
+            const labels = data.map(item => item.date);
             const clonesData = data.map(item => item.clones);
             const uniqueClonesData = data.map(item => item.uniqueClones);
             const viewsData = data.map(item => item.views);
@@ -155,26 +150,26 @@ document.addEventListener('DOMContentLoaded', async () => {
                     }]
                 },
                 options: {
-                    responsive: true, // Ajustar el tamaño del gráfico en función del contenedor
+                    responsive: true,
                     scales: {
                         x: {
                             ticks: {
-                                display: false  // Ocultar las etiquetas en el eje X
+                                display: false
                             },
                             title: {
-                                display: false  // Ocultar el título del eje X
+                                display: false
                             }
                         }
                     },
                     plugins: {
                         legend: {
-                            display: false  // Eliminar la leyenda y los cuadraditos
+                            display: false
                         }
                     }
                 }
             });
-            
-            
+
+
         });
 
     } catch (error) {
@@ -184,10 +179,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-// Función para obtener los datos de un repositorio específico
 async function fetchRepositoryStats(repositoryId) {
     try {
-        // Llamar a la API con el repositoryId (Nota: la URL ahora es http://localhost:3001)
         const response = await fetch(`http://localhost:3001/api/db-stats/${repositoryId}`);
 
         if (!response.ok) {
@@ -196,7 +189,6 @@ async function fetchRepositoryStats(repositoryId) {
 
         const data = await response.json();
 
-        // Procesar los datos y convertirlos en el formato que necesitas para el gráfico
         const chartData = data.map(item => ({
             date: new Date(item.date).toLocaleDateString(), // Formatear la fecha
             clones: item.clones,
@@ -205,7 +197,6 @@ async function fetchRepositoryStats(repositoryId) {
             uniqueViews: item.uniqueViews
         }));
 
-        console.log(chartData);  // Mostrar los datos procesados para el gráfico
 
         return chartData;
     } catch (error) {
@@ -214,7 +205,6 @@ async function fetchRepositoryStats(repositoryId) {
     }
 }
 
-// Función para obtener las últimas estadísticas de los repositorios
 function getLatestStats(data) {
     const latestStats = {};
 
@@ -226,8 +216,6 @@ function getLatestStats(data) {
         }
     });
 
-    console.log("Local Repos");
-    console.log(Object.values(latestStats));
 
     return Object.values(latestStats);
 }
