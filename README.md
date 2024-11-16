@@ -86,6 +86,11 @@ The `updateStats.js` script is responsible for populating the database with repo
 - Open `http://localhost:3000` in your web browser to view the statistics dashboard.
 - The dashboard will display a mosaic of cards, each representing a GitHub repository with its clone and visit statistics.
 
+## Screenshot
+
+![Screenshot of the dashboard](screen_01.png)
+
+
 ## Contributing
 
 If you would like to contribute to this project, please fork the repository and create a pull request with your changes. Ensure that your code adheres to the project’s coding standards and includes appropriate tests.
